@@ -4,7 +4,27 @@ This project is an example of how you can combine annotation processing  with as
 
 ## Problem
 
-This code solves a specific problem which can be described as follows: you want to be able to add callbacks to arbitrary methods invocations (before method and after).
+This code solves a specific problem which can be described as follows: we want to have an opportunity to add callbacks to arbitrary methods invocations (before annotated method or after). For example lets consider a simple class:
+
+```java
+    public class Application {
+
+        public void someMethod1() {
+            System.out.println("someMethod1 is invoked");
+        }
+    }
+```
+
+What we want is to write code like this: 
+
+```java
+    Application app = new Application();
+    app.OnSomeMethod1BeforeEvent.add((emmiter) -> {
+        System.out.println("some before-callback for method \"someMethod1\"");
+    });
+```
+
+Without Aspectj we would have to add new field per method to accumulate callbacks and moreover we need to modify the method itself. 
 
 ## Annotation processing
 
