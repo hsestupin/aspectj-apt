@@ -1,0 +1,78 @@
+task wrapper(type: Wrapper) {
+  gradleVersion = "1.12"
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+allprojects {
+  repositories {
+    mavenCentral()
+  }
+}
+
+apply plugin: "idea"
+
+def javaVersion = JavaVersion.VERSION_1_8
+
+configure(subprojects) {
+  apply plugin: "java"
+  apply plugin: "idea"
+
+  sourceCompatibility = javaVersion
+
+  configurations {
+    provided
+  }
+
+  // Intellij Idea stuff
+  idea {
+    module {
+      jdkName = sourceCompatibility
+      scopes.PROVIDED.plus += configurations.provided
+
+      sourceDirs += file("generated")
+      testSourceDirs += file("generated_tests")
+
+      downloadJavadoc = true
+      downloadSources = true
+
+      iml {
+        withXml { provider ->
+          provider.node.component.content.sourceFolder
+              .findAll { it.@url.contains("generated") }
+              .each { it.@generated = "true" }
+        }
+      }
+    }
+
+    // todo Eclipse integration
+  }
+
+  if (project.configurations.findByName('ajtools') == null) {
+    project.configurations.create('ajtools')
+    project.dependencies {
+      ajtools files("${rootProject.projectDir}/lib/aspectjtools.jar")
+      compile files("${rootProject.projectDir}/lib/aspectjrt.jar")
+    }
+  }
+
+  dependencies {
+    compile "org.jetbrains:annotations:13.0"
+  }
+
+  sourceSets {
+    main {
+      compileClasspath += configurations.provided
+    }
+    test {
+      compileClasspath += configurations.provided
+      runtimeClasspath += configurations.provided
+    }
+  }
+
+}
+
