@@ -2,11 +2,11 @@
 
 This project is an example of how you can combine annotation processing  with aspectj.
 
-# Problem
+## Problem
 
 This code solves a specific problem which can be described as follows: you want to be able to add callbacks to arbitrary methods invocations (before method and after).
 
-# Annotation processing
+## Annotation processing
 
 Firstly we mark some methods with `apt.Event` annotation from module **annotation-processors**. After that APT will generate 2 files:
 
@@ -15,7 +15,7 @@ Firstly we mark some methods with `apt.Event` annotation from module **annotatio
    * `apt.Event#Order.Before`
    * `apt.Event#Order.After`
 
-# Usage
+## Usage
 
 How to run `my.Application`:
 ```bash
